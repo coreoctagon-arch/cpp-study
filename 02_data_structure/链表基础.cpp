@@ -8,6 +8,16 @@ struct LNode {
 
 typedef LNode* LinkList;
 
+void Print(LinkList L)
+{
+	LNode* p=L->next;
+	while(p!=nullptr)
+	{
+		cout<<p->data<<"->";
+		p=p->next;
+	}
+}
+
 LNode* getNewNode(int val)
 {
 	LNode* p=new LNode;
@@ -535,9 +545,52 @@ void deleteDuplicateUnsorted(LinkList L)
 	}
 }
 
-void reverseEceryK(LinkList L,int k)
+LinkList reverseListK(LinkList head)
 {
-	
+	LNode* prev=nullptr,*cur=head;
+	while(cur)
+	{
+		LNode* next=cur->next;
+		cur->next=prev;
+		prev=cur;
+		cur=next;
+	}
+	return prev;
+}
+void reverseEveryK(LinkList L,int k)
+{
+	LNode* p=L->next;
+	int cnt=0;
+	while(p!=nullptr)
+	{
+		p=p->next;
+		cnt++;
+	}
+	LNode* newhead=L,*newtail=newhead;
+	LNode* nowhead=L->next;
+	LNode* nexthead=L->next;
+	for(int i=0;i<cnt/k;i++)
+	{
+		p=nexthead;
+		nowhead=nexthead;
+		for(int j=1;j<k;j++)
+		{
+			p=p->next;
+		}
+		nexthead=p->next;
+		p->next=nullptr;
+		LNode* tmp=reverseListK(nowhead);
+		LNode* cur=tmp;
+		while(cur!=nullptr)
+		{
+			LNode* next=cur->next;
+			cur->next=nullptr;
+			newtail->next=cur;
+			newtail=cur;
+			cur=next;
+		}
+	}
+	newtail->next=nexthead;
 }
 
 void reoroderFirstLast(LinkList L)
@@ -659,6 +712,10 @@ bool isEmptyCircular(LinkList L)//???
 
 int main()
 {
-	
+	int a[8]={1,2,3,4,5,6,7,8};
+	int n=8;
+	LinkList L=createByTail(a,n);
+	reverseEveryK(L,3);
+	Print(L);
 	return 0;
 }
